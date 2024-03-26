@@ -1,35 +1,52 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
+import Header from './components/header/Header';
+import NotFound from './pages/404/NotFound';
+import Details from './pages/details/Details';
+import Explore from './pages/explore/Explore';
+import Home from './pages/home/Home';
+import SearchResult from './pages/searchResult/SearchResult';
+import { getApiConfiguration } from './store/homeSlice';
+import fetchDataFromApi from './utils/api';
 function App() {
-  const [count, setCount] = useState(0)
+   const dispatch = useDispatch();
+   const { url } = useSelector((state) => state.home);
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+   useEffect(() => {
+      apiConfig();
+   }, []);
+
+   const apiConfig = () => {
+      fetchDataFromApi('/configuration').then((data) => {
+         console.log(data);
+         const url = {
+            backdrop: data.images.secure_base_url + 'original',
+            poster: data.images.secure_base_url + 'original',
+            profile: data.images.secure_base_url + 'original',
+         };
+         dispatch(getApiConfiguration(url));
+      });
+   };
+   console.log('hello world!');
+   return (
+      <BrowserRouter>
+         <Header />
+         <Routes>
+            <Route path="/" element={<Home />} />
+
+            <Route path="/:mediaType/:id" element={<Details />} />
+
+            <Route path="/search/:query" element={<SearchResult />} />
+
+            <Route path="/explore/:mediaType" element={<Explore />} />
+
+            <Route path="*" element={<NotFound />} />
+         </Routes>
+         {/* <Footer /> */}
+      </BrowserRouter>
+   );
 }
 
-export default App
+export default App;
