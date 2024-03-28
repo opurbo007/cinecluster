@@ -6,13 +6,14 @@ import {
 } from 'react-icons/bs';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import PosterFallback from '../../assets/no-poster.png';
 import Rating from '../circleRating/Rating';
 import Wrapper from '../contentWrapper/Wrapper';
 import Genres from '../genres/Genres';
 import Img from '../lazyLoadImg/Img';
 import './style.scss';
 
-const Carousel = ({ data, loading, endpoint }) => {
+const Carousel = ({ data, loading, endpoint, title }) => {
    const carouselContainer = useRef();
    const { url } = useSelector((state) => state.home);
    const navigate = useNavigate();
@@ -45,6 +46,7 @@ const Carousel = ({ data, loading, endpoint }) => {
    return (
       <div className="carousel">
          <Wrapper>
+            {title && <div className="carouselTitle">{title}</div>}
             <BsFillArrowLeftCircleFill
                className="carouselLeftNav arrow"
                onClick={() => navigation('left')}
