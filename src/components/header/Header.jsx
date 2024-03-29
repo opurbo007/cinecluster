@@ -3,7 +3,7 @@ import { HiOutlineSearch } from 'react-icons/hi';
 import { SlMenu } from 'react-icons/sl';
 import { VscChromeClose } from 'react-icons/vsc';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import logo from '../../assets/movix-logo.svg';
+import logo from '../../assets/showboxlogo.png';
 import Wrapper from '../contentWrapper/Wrapper';
 import './style.scss';
 
